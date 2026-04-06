@@ -240,6 +240,15 @@
     .hero-inner{padding:0 20px;} .hero-stats{margin:0;} .hstat{padding:16px;}
     .work-item{flex-direction:column;} .work-label{min-width:auto;border-right:none;border-bottom:1px solid var(--primary-border);}
   }
+
+  /* 다크모드 완전 차단 */
+  @media (prefers-color-scheme: dark) {
+    html, body, * {
+      background-color: unset !important;
+      color: unset !important;
+    }
+    html { filter: none !important; }
+  }
 </style>
 </head>
 <body>
@@ -436,4 +445,20 @@
           const target = parseInt(el.getAttribute('data-target'));
           const suffix = el.getAttribute('data-suffix');
           let current = 0;
-          cons
+          const step = Math.ceil(target / 50);
+          const timer = setInterval(() => {
+            current = Math.min(current + step, target);
+            el.textContent = current.toLocaleString() + suffix;
+            if (current >= target) clearInterval(timer);
+          }, 28);
+          countObserver.unobserve(el);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.count-num').forEach(el => countObserver.observe(el));
+  });
+</script>
+
+</body>
+</html>
